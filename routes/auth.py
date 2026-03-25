@@ -1,26 +1,27 @@
 from fastapi import APIRouter
+from pydantic import BaseModel
 
 router = APIRouter()
+
+class User(BaseModel):
+    correo: str
+    contraseña: str
 
 auth_db = []
 
 @router.post("/login")
-def login(data: dict):
-    correo = data.get("correo")
-    contraseña = data.get("contraseña")
+def login(data: User):
     return {
         "mensaje": "Login exitoso",
-        "correo": correo,
-        "contraseña": contraseña
+        "correo": data.correo,
+        "contraseña": data.contraseña
     }
 
 @router.post("/register")
-def register(data: dict):
-    correo = data.get("correo")
-    contraseña = data.get("contraseña")
-    auth_db.append({"correo": correo, "contraseña": contraseña})
+def register(data: User):
+    auth_db.append({"correo": data.correo, "contraseña": data.contraseña})
     return {
         "mensaje": "Registro exitoso",
-        "correo": correo,
-        "contraseña": contraseña
+        "correo": data.correo,
+        "contraseña": data.contraseña
     }
